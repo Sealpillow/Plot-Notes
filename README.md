@@ -131,3 +131,10 @@ html_code = fig.to_html()
 # Print or use the HTML code as needed
 print(html_code)
 ```
+
+### Create CandleStick Chart
+Source: https://plotly.com/python/candlestick-charts/
+Code:
+```
+
+```
