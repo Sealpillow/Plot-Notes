@@ -133,8 +133,29 @@ print(html_code)
 ```
 
 ### Create CandleStick Chart
-Source: https://plotly.com/python/candlestick-charts/
+Source: https://plotly.com/python/candlestick-charts/ </br>
 Code:
 ```
+import yfinance as yf
+import plotly.graph_objects as go
 
+import pandas as pd
+from datetime import datetime
+
+data = yf.Ticker("MSFT").history(period="1mo")
+
+dateData =  data.index
+openData = list(data['Open'])
+closeData = list(data['Close'])
+highData = list(data['High'])
+lowData = list(data['Low'])
+
+fig = go.Figure(data=[go.Candlestick(x=dateData,
+                open=openData,
+                high=highData,
+                low=lowData,
+                close=closeData )])
+fig.show()
 ```
+Output: </br>
+![image](https://github.com/Sealpillow/Plot-Notes/assets/51332449/16e16da9-9fb8-479d-b221-7be4bcbf6408)
