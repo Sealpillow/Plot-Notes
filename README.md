@@ -1,5 +1,130 @@
 # Plot-Notes
 ## Plotly
+
+### Creating a Pivot Table and Plotting with Plotly
+```
+import pandas as pd
+import plotly.express as px
+
+# Example data
+data = {
+    'year': [2020, 2020, 2021, 2021, 2022, 2022, 2023, 2023],
+    'course': ['Engineering', 'Business', 'Engineering', 'Business', 'Engineering', 'Business', 'Engineering', 'Business'],
+    'enrolment': [300, 500, 320, 520, 310, 530, 330, 540]
+}
+
+df = pd.DataFrame(data)
+
+# Create a pivot table with years as index and courses as columns
+pivot = df.pivot_table(index='year', columns='course', values='enrolment', aggfunc='sum')
+
+```
+Plot Line Plot with pivot
+```
+import plotly.graph_objects as go
+
+# Create a figure
+fig = go.Figure()
+
+# Add traces (lines) for each course
+for course in pivot.columns:
+    fig.add_trace(go.Scatter(x=pivot.index, y=pivot[course], mode='lines+markers', name=course))
+
+# Customize the layout
+fig.update_layout(title='Enrolments Over the Years', xaxis_title='Year', yaxis_title='Enrolment')
+
+# Show the figure
+fig.show()
+```
+Plot Bar Chart with pivot
+```
+# Reset index to make 'year' a column again for easier plotting
+pivot_reset = pivot.reset_index()
+
+# Melt the pivot table for easier plotting with Plotly Express
+pivot_melted = pivot_reset.melt(id_vars='year', value_vars=pivot.columns, var_name='course', value_name='enrolment')
+
+# Plot using Plotly Express
+fig = px.bar(pivot_melted, x='year', y='enrolment', color='course', barmode='group',
+             title='Enrolments by Year and Course')
+
+# Show the figure
+fig.show()
+```
+
+Line Plot with Values Displayed
+```python
+import plotly.graph_objects as go
+
+# Example pivot table data
+pivot = pd.DataFrame({
+    'year': [2020, 2021, 2022, 2023],
+    'Engineering': [300, 320, 310, 330],
+    'Business': [500, 520, 530, 540]
+})
+pivot.set_index('year', inplace=True)
+
+# Create a figure
+fig = go.Figure()
+
+# Add traces (lines) for each course with value labels
+for course in pivot.columns:
+    fig.add_trace(go.Scatter(
+        x=pivot.index,
+        y=pivot[course],
+        mode='lines+markers+text',
+        name=course,
+        text=pivot[course],  # Display values
+        textposition='top center'  # Position of the text
+    ))
+
+# Customize the layout
+fig.update_layout(title='Enrolments Over the Years', xaxis_title='Year', yaxis_title='Enrolment')
+
+# Show the figure
+fig.show()
+
+```
+
+Bar Chart with Values Displayed
+```python
+import plotly.express as px
+
+# Example pivot table data
+pivot_reset = pd.DataFrame({
+    'year': [2020, 2021, 2022, 2023],
+    'Engineering': [300, 320, 310, 330],
+    'Business': [500, 520, 530, 540]
+})
+
+# Melt the data for easy plotting
+pivot_melted = pivot_reset.melt(id_vars='year', value_vars=pivot_reset.columns[1:], var_name='course', value_name='enrolment')
+
+# Create a bar chart with value labels
+fig = px.bar(pivot_melted, x='year', y='enrolment', color='course', barmode='group',
+             text='enrolment', title='Enrolments by Year and Course')
+
+# Customize the layout
+fig.update_traces(textposition='outside')  # Position the text outside the bars
+
+fig.show()
+```
+
+Pie Chart with Values Displayed
+```python
+import plotly.graph_objects as go
+
+# Example data
+labels = ['Engineering Sciences', 'Business & Administration', 'Humanities & Social Sciences']
+sizes = [11669, 10098, 10154]
+
+# Create a pie chart with value labels
+fig = go.Figure(data=[go.Pie(labels=labels, values=sizes, textinfo='label+percent+value')])
+
+fig.update_layout(title_text='Enrolment Distribution by Course')
+
+fig.show()
+```
 ### Adding text to histogram/Create histogram/ count plot:
 Set text_auto parameter to True </br>
 ```
