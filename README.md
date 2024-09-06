@@ -1,6 +1,76 @@
 # Plot-Notes
 ## Plotly
 
+
+```
+import plotly.graph_objects as go
+
+# Sample data for experience levels and salaries
+experience_levels = ['Entry Level', 'Mid Level', 'Senior Level', 'Executive-Level']
+salaries = [7000, 9500, 12350, 14750]
+percentage_increases = [36.39, 29.97, 19.31]  # Percentage increases between levels
+
+# Create bar chart
+fig = go.Figure()
+
+# Add bars
+fig.add_trace(go.Bar(
+    x=experience_levels,
+    y=salaries,
+    text=['', f"+{percentage_increases[0]}%", f"+{percentage_increases[1]}%", f"+{percentage_increases[2]}%"],
+    textposition='outside',
+    marker_color='blue'
+))
+
+# Add annotations (arrows) and text above arrows
+annotations = []
+for i in range(len(salaries) - 1):
+    # Start and end points for arrows
+    x0 = experience_levels[i]
+    x1 = experience_levels[i + 1]
+    y0 = salaries[i]
+    y1 = salaries[i + 1]
+
+    # Add arrow annotation with adjusted length (shorter arrows by changing `ay`)
+    annotations.append(dict(
+        x=x1,
+        y=y1 + 1000,  # End of the arrow at the height of the next bar
+        ax=x0,
+        ay=y0 + (y1 - y0) * 0.75,  # Make the arrow shorter by reducing the difference between y0 and y1
+        xref='x',
+        yref='y',
+        axref='x',
+        ayref='y',
+        showarrow=True,
+        arrowhead=3,
+        arrowsize=1,
+        arrowwidth=2,
+        arrowcolor='green'
+    ))
+
+    # Add text annotation above the arrow
+    annotations.append(dict(
+        x=(i + 0.5),  # Position in the middle of the two bars
+        y=(y0 + y1) / 2 + 500 + 1000,  # Slightly above the midpoint of the arrow
+        text=f"+{percentage_increases[i]}%",  # Percentage text
+        showarrow=False,  # Only text, no arrow
+        font=dict(size=12, color="black"),
+        align="center"
+    ))
+
+# Update layout to add annotations (arrows and text)
+fig.update_layout(
+    annotations=annotations,
+    title='Average Salary (USD) Based on Experience Level',
+    xaxis_title='Experience Level',
+    yaxis_title='Average Salary (USD)',
+    plot_bgcolor='rgba(245, 246, 249, 1)'
+)
+
+# Show figure
+fig.show()
+
+```
 ### Creating a Pivot Table and Plotting with Plotly
 ```
 import pandas as pd
