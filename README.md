@@ -1,7 +1,49 @@
 # Plot-Notes
 ## Plotly
 
+Pie chart Values inside, label outside
+```
+import plotly.graph_objects as go
 
+# Sample data
+labels = ['Category A', 'Category B', 'Category C']
+values = [4500, 2500, 1050]
+
+# Define common properties for both traces, including the custom color sequence
+common_props = dict(
+    labels=labels,
+    values=values,
+    hole=0.3,  # Optional, creates a donut-style pie chart; remove if not needed
+    marker=dict(colors=["#e60049", '#FFA500', '#FFD700', '#32CD32', "#0bb4ff", "#9b19f5"])  # Custom color sequence
+)
+
+# First trace: showing percentage outside
+trace1 = go.Pie(
+    **common_props,
+    textinfo='percent',
+    textposition='outside'
+)
+
+# Second trace: showing category labels inside
+trace2 = go.Pie(
+    **common_props,
+    textinfo='label',
+    textposition='inside'
+)
+
+# Create the figure with both traces overlapping
+fig = go.Figure(data=[trace1, trace2])
+
+# Remove the legend and add a title
+fig.update_layout(
+    showlegend=False,
+    title_text="Pie Chart with Overlapping Text and Custom Colors"
+)
+
+# Show the pie chart
+fig.show()
+
+```
 
 Create Arrow between bars in bar plot
 ```
